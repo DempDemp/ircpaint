@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>IRCpaint</title>
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/farbtastic.css" type="text/css" />
+	<link rel="stylesheet" href="css/ircpaint.css" type="text/css" />
+	<script src="js/jquery-1.7.1.min.js"></script>
+	<script src="js/bootstrap-tooltip.js"></script>
+	<script src="js/farbtastic.js"></script>
+	<script src="js/ircpaint.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="sidebar">
+			<h3>Colour Palette</h3>
+			<div id="draw-options">
+				<ul id="activepalette" class="thumbnails palette">
+					<a href="javascript:void(0);" class="current"><li id="current" class="thumbnail" style="background-color: #000000;"></li></a>
+					<a href="javascript:void(0);" class="altcolour"><li id="altcolour" class="thumbnail" style="background-color: #FFFFFF;"></li></a>
+				</ul>
+				<div id="draw-tools" class="btn-group" data-toggle="buttons-radio">
+					<button class="btn active" id="pencil"><img src="img/pencil.png"></button>
+					<button class="btn" id="flood"><img src="img/flood.png"></button>
+				</div>
+			</div>
+			<ul id="palette" class="thumbnails palette">
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+				<a href="javascript:void(0);"><li class="thumbnail"></li></a>
+			</ul>
+			<div class="well" id="commands">
+				<button class="btn btn-large" id="image-upload" type="button">Convert Image</button>
+				<button class="btn btn-primary btn-large" id="generate" type="button">Generate</button>
+				<button class="btn btn-danger btn-small" id="reset" type="button">Reset</button>
+				<div class="btn-group">
+					<button class="btn btn-small column btn-disabled" disabled="disabled" id="undo" type="button">Undo</button>
+					<button class="btn btn-small column btn-disabled" disabled="disabled" id="redo" type="button">Redo</button>
+				</div>
+				<button class="btn btn-small btn-warning" id="trim" type="button" title="Trims redundant empty space from your drawing. Note: uses the first colour from the colour palette as the colour of the area to be made redundant (default: white). Double click on the colour to change it.">Trim</button>
+			</div>
+			<form class="form-horizontal">
+				<fieldset>
+					<legend>Settings</legend>
+					<div class="control-group">
+						<label class="control-label" for="colourScheme">Colour palette</label>
+						<div class="controls">
+							<select class="span1" name="colourScheme" id="colourScheme">
+							</select>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="columns">Columns:</label>
+						<div class="controls">
+							<input class="span1" id="columns" name="columns" size="3" type="text" value="85" title="Number of cells, or characters, in a row.">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="rows">Rows:</label>
+						<div class="controls">
+							<input class="span1" id="rows" name="rows" size="3" type="text" value="25" title="Number of lines">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="cellwidth">Cell width:</label>
+						<div class="controls">
+							<input class="span1" id="cellwidth" name="cellwidth" size="3" type="text" value="8" title="Width in pixels of each cell, or character. Note: reset is required for it to change.">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="cellheight">Cell height:</label>
+						<div class="controls">
+							<input class="span1" id="cellheight" name="cellheight" size="3" type="text" value="16" title="Height in pixels of each cell, or character. Note: reset is required for it to change.">
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<div id="colourpicker"></div>
+			<div id="image-upload-container">
+				<form class="form-horizontal">
+					<fieldset>
+						<legend>Convert Image</legend>
+						<p>To maximise quality output, please upload a resized image -- as small as possible.</p>
+						<div class="control-group">
+							<label class="control-label" for="fileInput">Image:</label>
+							<div class="controls">
+								<input class="input-file" id="fileInput" name="fileInput" type="file">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="image-width">Width:</label>
+							<div class="controls">
+								<input class="span1" id="image-width" name="image-width" size="4" type="text" value="90" title="Number of cells, or characters, in a row.">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="image-height">Height:</label>
+							<div class="controls">
+								<input class="span1" id="image-height" name="image-height" size="4" type="text" value="38" title="Number of lines.">
+							</div>
+						</div>
+						<p>It will <strong>probably</strong> be best if you keep the following setting as they are:</p>
+						<div class="control-group">
+							<label class="control-label" for="cell-width">Cell width:</label>
+							<div class="controls">
+								<input class="span1" id="image-cell-width" name="cell-width" size="4" type="text" value="8" title="Width in pixels of each cell, or character.">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="cell-height">Cell height:</label>
+							<div class="controls">
+								<input class="span1" id="image-cell-height" name="cell-height" size="4" type="text" value="16" title="Height in pixels of each cell, or character.">
+							</div>
+						</div>
+						<button class="btn btn-primary btn-small" id="image-generate" type="button">Generate</button> <button class="btn btn-close" id="image-close" type="button">Close</button>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		<div class="content">
+			<div class="page-header">
+				<h1>IRCpaint <small>- notepad for quitters.</small></h1>
+			</div>
+			<div class="row">
+				<div class="canvas_container">
+					<canvas id="myCanvas" width="680" height="400">Your browser makes no sense</canvas>
+				</div>
+				<div class="control-group">
+					<div class="controls">
+						<textarea id="gentextarea" wrap="off" title="Generated IRC drawing"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer>
+		</footer>
+	</div>
+</body>
+</html>
